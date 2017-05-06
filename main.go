@@ -15,11 +15,11 @@ func (f *Init) Help() string {
 
 func (f *Init) Run(args []string) int {
 	path := os.Getenv("GOPATH")
-	cur := path + "/src/github.com/Yamashou/task-manager"
-	cur = cur + "/Tasks"
-	os.Mkdir(cur, 0777)
-	os.Mkdir(cur+"/Finished", 0777)
-	os.Mkdir(cur+"/Have", 0777)
+	root := path + "/src/github.com/Yamashou/task-manage"
+	root = root + "/Tasks"
+	os.Mkdir(root, 0777)
+	os.Mkdir(root+"/Finished", 0777)
+	os.Mkdir(root+"/Have", 0777)
 	log.Println("Make Tasks!")
 	log.Println("Let's start to manage tasks on prompt")
 	return 0

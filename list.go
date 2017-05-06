@@ -15,7 +15,7 @@ func (f *List) Help() string {
 
 func (f *List) Run(args []string) int {
 	path := os.Getenv("GOPATH")
-	root := path + "/src/github.com/Yamashou/task-manager/Tasks/Have"
+	root := path + "/src/github.com/Yamashou/task-manage/Tasks/Have"
 	err := filepath.Walk(root,
 		func(path string, info os.FileInfo, err error) error {
 			if info.IsDir() {
