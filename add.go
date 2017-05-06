@@ -33,8 +33,8 @@ func (f *Add) Run(args []string) int {
 		end,
 	}
 	path := os.Getenv("GOPATH")
-	cur := path + "/src/github.com/task-manager/Tasks/Have/"
-	userFile := cur + os.Args[2] + "_Task.json"
+	root := path + "/src/github.com/task-manager/Tasks/Have/"
+	userFile := root + os.Args[2] + "_Task.json"
 	fout, err := os.Create(userFile)
 	if err != nil {
 		fmt.Println(userFile, err)
