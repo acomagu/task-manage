@@ -15,14 +15,14 @@ func (f *List) Help() string {
 
 func (f *List) Run(args []string) int {
 	path := os.Getenv("GOPATH")
-	root := path + "/src/github.com/Yamashou/task-manage/Tasks/Have"
+	root := path + "/src/github.com/Yamashou/task-manage/Tasks/"
 	err := filepath.Walk(root,
 		func(path string, info os.FileInfo, err error) error {
 			if info.IsDir() {
 				return nil
 			}
 			rel, err := filepath.Rel(root, path)
-			taskname := strings.Split(rel, "_Task")
+			taskname := strings.Split(rel, "_")
 			fmt.Println(taskname[0])
 			return nil
 		})

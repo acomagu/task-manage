@@ -48,6 +48,9 @@ func main() {
 		"show": func() (cli.Command, error) {
 			return &Show{}, nil
 		},
+		"done": func() (cli.Command, error) {
+			return &Done{}, nil
+		},
 	}
 
 	exitStatus, err := c.Run()
