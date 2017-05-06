@@ -15,7 +15,7 @@ func (f *Init) Help() string {
 
 func (f *Init) Run(args []string) int {
 	path := os.Getenv("GOPATH")
-	cur := path + "/src/github.com/task-manager"
+	cur := path + "/src/github.com/Yamashou/task-manager"
 	cur = cur + "/Tasks"
 	os.Mkdir(cur, 0777)
 	os.Mkdir(cur+"/Finished", 0777)

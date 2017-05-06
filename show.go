@@ -17,7 +17,7 @@ func (f *Show) Help() string {
 
 func (f *Show) Run(args []string) int {
 	path := os.Getenv("GOPATH")
-	root := path + "/src/github.com/task-manager/Tasks/Have/"
+	root := path + "/src/github.com/Yamashou/task-manager/Tasks/Have/"
 	if len(os.Args) < 3 {
 		err := filepath.Walk(root,
 			func(path string, info os.FileInfo, err error) error {
