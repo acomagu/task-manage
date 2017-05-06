@@ -33,5 +33,5 @@ func (f *List) Run(args []string) int {
 }
 
 func (f *List) Synopsis() string {
-	return "Print \"List!\""
+	return "display of all task name"
 }

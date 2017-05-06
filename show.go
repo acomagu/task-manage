@@ -38,7 +38,7 @@ func (f *Show) Run(args []string) int {
 }
 
 func (f *Show) Synopsis() string {
-	return "Print \"Show!\""
+	return "display of task or all task"
 }
 
 func printj(root string) {

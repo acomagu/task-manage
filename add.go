@@ -19,7 +19,7 @@ type Data struct {
 type Add struct{}
 
 func (f *Add) Help() string {
-	return "app Add"
+	return "You can add a task \n ./app add <title> <content> <Days>"
 }
 
 func (f *Add) Run(args []string) int {
