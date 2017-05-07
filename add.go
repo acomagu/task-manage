@@ -33,7 +33,7 @@ func (f *Add) Run(args []string) int {
 		end,
 	}
 	root := GetRoot() + "/Tasks/Have/"
-	userFile := root + os.Args[2] + "_Task.json"
+	userFile := root + os.Args[2] + ".json"
 	fout, err := os.Create(userFile)
 	if err != nil {
 		fmt.Println(userFile, err)

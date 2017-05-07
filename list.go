@@ -21,12 +21,12 @@ func (f *List) Run(args []string) int {
 				return nil
 			}
 			rel, err := filepath.Rel(root, path)
-			taskname := strings.Split(rel, "_Task")
+			taskname := strings.Split(rel, ".json")
 			fmt.Println(taskname[0])
 			return nil
 		})
 	if err != nil {
-		fmt.Println(1, err)
+		fmt.Println(err)
 	}
 	return 0
 }

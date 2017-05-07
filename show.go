@@ -28,10 +28,10 @@ func (f *Show) Run(args []string) int {
 				return nil
 			})
 		if err != nil {
-			fmt.Println(1, err)
+			fmt.Println(err)
 		}
 	} else {
-		printj(root + os.Args[2] + "_Task.json")
+		printj(root + os.Args[2] + ".json")
 	}
 	return 0
 }
