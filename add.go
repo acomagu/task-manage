@@ -13,7 +13,7 @@ type Data struct {
 	Title     string    `json:"title"`
 	Content   string    `json:"content"`
 	CreatedAt time.Time `json:"created_at"`
-	DeadLine  time.Time `json:"dead_line"`
+	DeadLine  time.Time `json:"deadline"`
 }
 
 type Add struct{}
@@ -32,8 +32,7 @@ func (f *Add) Run(args []string) int {
 		now,
 		end,
 	}
-	path := os.Getenv("GOPATH")
-	root := path + "/src/github.com/Yamashou/task-manage/Tasks/Have/"
+	root := GetRoot() + "/Tasks/Have/"
 	userFile := root + os.Args[2] + "_Task.json"
 	fout, err := os.Create(userFile)
 	if err != nil {

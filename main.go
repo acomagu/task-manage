@@ -7,6 +7,12 @@ import (
 	"github.com/mitchellh/cli"
 )
 
+func GetRoot() string {
+	path := os.Getenv("HOME")
+	root := path + "/.task-manage"
+	return root
+}
+
 type Init struct{}
 
 func (f *Init) Help() string {
@@ -14,12 +20,12 @@ func (f *Init) Help() string {
 }
 
 func (f *Init) Run(args []string) int {
-	path := os.Getenv("GOPATH")
-	root := path + "/src/github.com/Yamashou/task-manage"
-	root = root + "/Tasks"
+	root := GetRoot()
 	os.Mkdir(root, 0777)
-	os.Mkdir(root+"/Finished", 0777)
-	os.Mkdir(root+"/Have", 0777)
+	taskRoot := root + "/Tasks"
+	os.Mkdir(taskRoot, 0777)
+	os.Mkdir(taskRoot+"/Finished", 0777)
+	os.Mkdir(taskRoot+"/Have", 0777)
 	log.Println("Make Tasks!")
 	log.Println("Let's start to manage tasks on prompt")
 	return 0
