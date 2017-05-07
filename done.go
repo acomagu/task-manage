@@ -12,9 +12,9 @@ func (f *Done) Help() string {
 }
 
 func (f *Done) Run(args []string) int {
-	root := GetRoot() + "/Tasks/Have/"
-	old_file := root + os.Args[2] + ".json"
-	new_file := GetRoot() + "/Tasks/Finished/" + os.Args[2] + ".json"
+	root := GetRoot()
+	old_file := root.have + os.Args[2] + ".json"
+	new_file := root.finished + os.Args[2] + ".json"
 
 	err := os.Rename(old_file, new_file)
 	if err != nil {

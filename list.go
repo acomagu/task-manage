@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -14,19 +12,11 @@ func (f *List) Help() string {
 }
 
 func (f *List) Run(args []string) int {
-	root := GetRoot() + "/Tasks/"
-	err := filepath.Walk(root,
-		func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				return nil
-			}
-			rel, err := filepath.Rel(root, path)
-			taskname := strings.Split(rel, ".json")
-			fmt.Println(taskname[0])
-			return nil
-		})
-	if err != nil {
-		fmt.Println(err)
+	root := GetRoot()
+	roop := root.GetList(1)
+	for _, v := range roop {
+		taskname := strings.Split(v, ".json")
+		fmt.Println(taskname[0])
 	}
 	return 0
 }

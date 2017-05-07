@@ -32,8 +32,8 @@ func (f *Add) Run(args []string) int {
 		now,
 		end,
 	}
-	root := GetRoot() + "/Tasks/Have/"
-	userFile := root + os.Args[2] + ".json"
+	root := GetRoot()
+	userFile := root.have + os.Args[2] + ".json"
 	fout, err := os.Create(userFile)
 	if err != nil {
 		fmt.Println(userFile, err)

@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path/filepath"
 )
 
 type Show struct{}
@@ -16,22 +15,14 @@ func (f *Show) Help() string {
 }
 
 func (f *Show) Run(args []string) int {
-	root := GetRoot() + "/Tasks/Have/"
+	root := GetRoot()
 	if len(os.Args) < 3 {
-		err := filepath.Walk(root,
-			func(path string, info os.FileInfo, err error) error {
-				if info.IsDir() {
-					return nil
-				}
-				rel, err := filepath.Rel(root, path)
-				printj(root + rel)
-				return nil
-			})
-		if err != nil {
-			fmt.Println(err)
+		roop := root.GetList(2)
+		for _, v := range roop {
+			printj(root.have + v)
 		}
 	} else {
-		printj(root + os.Args[2] + ".json")
+		printj(root.have + os.Args[2] + ".json")
 	}
 	return 0
 }

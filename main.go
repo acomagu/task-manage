@@ -1,15 +1,60 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/mitchellh/cli"
 )
 
-func GetRoot() string {
+type Root struct {
+	root     string
+	troot    string
+	have     string
+	finished string
+}
+
+func (r Root) GetList(n int) []string {
+	var result []string
+	var rpath string
+	switch n {
+	case 0:
+		rpath = r.root
+	case 1:
+		rpath = r.troot
+	case 2:
+		rpath = r.have
+	case 3:
+		rpath = r.finished
+	default:
+		rpath = r.root
+	}
+	err := filepath.Walk(rpath,
+		func(path string, info os.FileInfo, err error) error {
+			if info.IsDir() {
+				return nil
+			}
+			rel, err := filepath.Rel(rpath, path)
+			result = append(result, rel)
+			return nil
+		})
+	if err != nil {
+		fmt.Println(err)
+	}
+	return result
+}
+
+func GetRoot() Root {
 	path := os.Getenv("HOME")
-	root := path + "/.task-manage"
+	r := path + "/.task-manage"
+	root := Root{
+		r,
+		r + "/Tasks/",
+		r + "/Tasks/Have/",
+		r + "/Tasks/Finished/",
+	}
 	return root
 }
 
