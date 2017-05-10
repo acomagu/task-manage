@@ -12,7 +12,7 @@ func (f *Done) Help() string {
 }
 
 func (f *Done) Run(args []string) int {
-	root := GetRoot()
+	root := NewRoot()
 	old_file := root.have + os.Args[2] + ".json"
 	new_file := root.finished + os.Args[2] + ".json"
 

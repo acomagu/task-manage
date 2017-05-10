@@ -1,9 +1,10 @@
 package main
 
 import (
-  "os"
-  "fmt"
+	"fmt"
+	"os"
 )
+
 type Init struct{}
 
 func (f *Init) Help() string {
@@ -11,7 +12,7 @@ func (f *Init) Help() string {
 }
 
 func (f *Init) Run(args []string) int {
-	root := GetRoot()
+	root := NewRoot()
 	os.Mkdir(root.root, 0777)
 	os.Mkdir(root.troot, 0777)
 	os.Mkdir(root.finished, 0777)

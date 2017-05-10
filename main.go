@@ -16,21 +16,22 @@ type Root struct {
 	finished string
 }
 
-func (r Root) GetList(n int) []string {
+func (r Root) GetRootTasks() string {
+	return r.troot
+}
+
+func (r Root) GetListTasks() []string {
+	return r.GetList(r.GetRootTasks())
+}
+func (r Root) GetRootHave() string {
+	return r.have
+}
+
+func (r Root) GetListHave() []string {
+	return r.GetList(r.GetRootHave())
+}
+func (r Root) GetList(rpath string) []string {
 	var result []string
-	var rpath string
-	switch n {
-	case 0:
-		rpath = r.root
-	case 1:
-		rpath = r.troot
-	case 2:
-		rpath = r.have
-	case 3:
-		rpath = r.finished
-	default:
-		rpath = r.root
-	}
 	err := filepath.Walk(rpath,
 		func(path string, info os.FileInfo, err error) error {
 			if info.IsDir() {
@@ -46,7 +47,7 @@ func (r Root) GetList(n int) []string {
 	return result
 }
 
-func GetRoot() Root {
+func NewRoot() Root {
 	path := os.Getenv("HOME")
 	r := path + "/.task-manage"
 	root := Root{

@@ -32,18 +32,18 @@ func (f *Add) Run(args []string) int {
 		now,
 		end,
 	}
-	root := GetRoot()
+	root := NewRoot()
 	userFile := root.have + os.Args[2] + ".json"
 	fout, err := os.Create(userFile)
 	if err != nil {
 		fmt.Println(userFile, err)
 	}
 	outputJson, err := json.Marshal(&data)
+	fout.Write([]byte(outputJson))
 	if err != nil {
 		panic(err)
 	}
 	defer fout.Close()
-	fout.Write([]byte(outputJson))
 	log.Println(userFile)
 	return 0
 }

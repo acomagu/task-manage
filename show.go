@@ -15,9 +15,9 @@ func (f *Show) Help() string {
 }
 
 func (f *Show) Run(args []string) int {
-	root := GetRoot()
+	root := NewRoot()
 	if len(os.Args) < 3 {
-		roop := root.GetList(2)
+		roop := root.GetListHave()
 		for _, v := range roop {
 			printj(root.have + v)
 		}
