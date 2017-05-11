@@ -27,13 +27,16 @@ func (f *Edit) Run(args []string) int {
 	if err := json.Unmarshal(bytes, &data); err != nil {
 		log.Fatal(err)
 	}
+  if err := os.Remove(task); err != nil {
+       fmt.Println(err)
+   }
   data.Title = os.Args[3]
   data.Content = os.Args[4]
   now := time.Now()
 	n, _ := strconv.Atoi(os.Args[5])
 	end := now.AddDate(0, 0, n)
   data.DeadLine = end
-  fout, err := os.Create(task)
+  fout, err := os.Create(root.have + os.Args[3] + ".json")
   if err != nil {
 		fmt.Println(task, err)
 	}
@@ -43,7 +46,7 @@ func (f *Edit) Run(args []string) int {
 		panic(err)
 	}
 	defer fout.Close()
-  Printj(task)
+  Printj(root.have + os.Args[3] + ".json")
 	return 0
 }
 
