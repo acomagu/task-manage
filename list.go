@@ -15,5 +15,5 @@ func (f *List) Run(args []string) int {
 }
 
 func (f *List) Synopsis() string {
-	return "display of all task name"
+	return "display of all tasks"
 }
