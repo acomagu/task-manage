@@ -80,6 +80,9 @@ func main() {
 		"done": func() (cli.Command, error) {
 			return &Done{}, nil
 		},
+		"edit": func() (cli.Command, error) {
+			return &Edit{}, nil
+		},
 	}
 
 	exitStatus, err := c.Run()

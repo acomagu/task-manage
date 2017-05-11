@@ -1,0 +1,52 @@
+package main
+
+import (
+	"os"
+  "encoding/json"
+	"fmt"
+	"io/ioutil"
+  "log"
+  "strconv"
+	"time"
+)
+
+type Edit struct{}
+
+func (f *Edit) Help() string {
+	return "task-manage edit <task Title> <task Content> <task days>"
+}
+
+func (f *Edit) Run(args []string) int {
+	root := NewRoot()
+  task := root.have + os.Args[2] + ".json"
+  bytes, err := ioutil.ReadFile(task)
+	if err != nil {
+		log.Fatal(err)
+	}
+  var data Data
+	if err := json.Unmarshal(bytes, &data); err != nil {
+		log.Fatal(err)
+	}
+  data.Title = os.Args[3]
+  data.Content = os.Args[4]
+  now := time.Now()
+	n, _ := strconv.Atoi(os.Args[5])
+	end := now.AddDate(0, 0, n)
+  data.DeadLine = end
+  fout, err := os.Create(task)
+  if err != nil {
+		fmt.Println(task, err)
+	}
+  outputJson, err := json.Marshal(&data)
+  fout.Write([]byte(outputJson))
+	if err != nil {
+		panic(err)
+	}
+	defer fout.Close()
+  Printj(task)
+	return 0
+}
+
+func (f *Edit) Synopsis() string {
+	return "edit task"
+}

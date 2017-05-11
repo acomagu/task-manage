@@ -19,10 +19,10 @@ func (f *Show) Run(args []string) int {
 	if len(os.Args) < 3 {
 		roop := root.GetListHave()
 		for _, v := range roop {
-			printj(root.have + v)
+			Printj(root.have + v)
 		}
 	} else {
-		printj(root.have + os.Args[2] + ".json")
+		Printj(root.have + os.Args[2] + ".json")
 	}
 	return 0
 }
@@ -31,7 +31,7 @@ func (f *Show) Synopsis() string {
 	return "display of task or all task"
 }
 
-func printj(root string) {
+func Printj(root string) {
 	bytes, err := ioutil.ReadFile(root)
 	if err != nil {
 		log.Fatal(err)

@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"time"
@@ -33,10 +32,10 @@ func (f *Add) Run(args []string) int {
 		end,
 	}
 	root := NewRoot()
-	userFile := root.have + os.Args[2] + ".json"
-	fout, err := os.Create(userFile)
+	task := root.have + os.Args[2] + ".json"
+	fout, err := os.Create(task)
 	if err != nil {
-		fmt.Println(userFile, err)
+		fmt.Println(task, err)
 	}
 	outputJson, err := json.Marshal(&data)
 	fout.Write([]byte(outputJson))
@@ -44,7 +43,7 @@ func (f *Add) Run(args []string) int {
 		panic(err)
 	}
 	defer fout.Close()
-	log.Println(userFile)
+	Printj(task)
 	return 0
 }
 
