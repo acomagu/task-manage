@@ -13,6 +13,7 @@ type Data struct {
 	Content   string    `json:"content"`
 	CreatedAt time.Time `json:"created_at"`
 	DeadLine  time.Time `json:"deadline"`
+	DoneTime  time.Time `json:"donetime"`
 }
 
 type Add struct{}
@@ -29,8 +30,8 @@ func (f *Add) Run(args []string) int {
 		os.Args[3],
 		now,
 		end,
+		end,
 	}
-	root := NewRoot()
 	task := root.have + os.Args[2] + ".json"
 	fout, err := os.Create(task)
 	if err != nil {

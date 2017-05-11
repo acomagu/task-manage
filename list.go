@@ -12,7 +12,6 @@ func (f *List) Help() string {
 }
 
 func (f *List) Run(args []string) int {
-	root := NewRoot()
 	roop := root.GetListTasks()
 	for _, v := range roop {
 		taskname := strings.Split(v, ".json")

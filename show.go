@@ -1,10 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -15,7 +12,6 @@ func (f *Show) Help() string {
 }
 
 func (f *Show) Run(args []string) int {
-	root := NewRoot()
 	if len(os.Args) < 3 {
 		roop := root.GetListHave()
 		for _, v := range roop {
@@ -31,15 +27,8 @@ func (f *Show) Synopsis() string {
 	return "display of task or all task"
 }
 
-func Printj(root string) {
-	bytes, err := ioutil.ReadFile(root)
-	if err != nil {
-		log.Fatal(err)
-	}
-	var data Data
-	if err := json.Unmarshal(bytes, &data); err != nil {
-		log.Fatal(err)
-	}
+func Printj(task string) {
+	data := FindTask(task)
 	fmt.Println("Title : ", data.Title)
 	fmt.Println("Content : ", data.Content)
 	fmt.Println("Dead Line : ", data.DeadLine.Format("2006-01-02"))

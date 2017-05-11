@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -16,6 +18,8 @@ type Root struct {
 	have     string
 	finished string
 }
+
+var root = NewRoot()
 
 func (r Root) GetRootTasks() string {
 	return r.troot
@@ -64,6 +68,31 @@ func NewPoint(n int) (time.Time, time.Time) {
 	now := time.Now()
 	end := now.AddDate(0, 0, n)
 	return end, now
+}
+
+func FindTask(task string) Data {
+	bytes, err := ioutil.ReadFile(task)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var data Data
+	if err := json.Unmarshal(bytes, &data); err != nil {
+		log.Fatal(err)
+	}
+	return data
+}
+
+func CreateFile(data Data) {
+	fout, err := os.Create(root.have + data.Title + ".json")
+	if err != nil {
+		fmt.Println(data.Title, err)
+	}
+	outputJson, err := json.Marshal(&data)
+	fout.Write([]byte(outputJson))
+	if err != nil {
+		panic(err)
+	}
+	defer fout.Close()
 }
 
 func main() {

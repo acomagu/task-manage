@@ -1,10 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"os"
 	"strconv"
 )
@@ -16,16 +13,8 @@ func (f *Edit) Help() string {
 }
 
 func (f *Edit) Run(args []string) int {
-	root := NewRoot()
 	task := root.have + os.Args[2] + ".json"
-	bytes, err := ioutil.ReadFile(task)
-	if err != nil {
-		log.Fatal(err)
-	}
-	var data Data
-	if err := json.Unmarshal(bytes, &data); err != nil {
-		log.Fatal(err)
-	}
+	data := FindTask(task)
 	if err := os.Remove(task); err != nil {
 		fmt.Println(err)
 	}
@@ -34,16 +23,7 @@ func (f *Edit) Run(args []string) int {
 	n, _ := strconv.Atoi(os.Args[5])
 	end, _ := NewPoint(n)
 	data.DeadLine = end
-	fout, err := os.Create(root.have + os.Args[3] + ".json")
-	if err != nil {
-		fmt.Println(task, err)
-	}
-	outputJson, err := json.Marshal(&data)
-	fout.Write([]byte(outputJson))
-	if err != nil {
-		panic(err)
-	}
-	defer fout.Close()
+	CreateFile(data)
 	Printj(root.have + os.Args[3] + ".json")
 	return 0
 }

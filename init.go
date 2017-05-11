@@ -12,7 +12,6 @@ func (f *Init) Help() string {
 }
 
 func (f *Init) Run(args []string) int {
-	root := NewRoot()
 	os.Mkdir(root.root, 0777)
 	os.Mkdir(root.troot, 0777)
 	os.Mkdir(root.finished, 0777)
