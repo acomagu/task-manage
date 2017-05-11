@@ -13,7 +13,7 @@ import (
 type Edit struct{}
 
 func (f *Edit) Help() string {
-	return "task-manage edit <task Title> <task Content> <task days>"
+	return "task-manage edit <task Title> <task New Title> <task New Content> <task Nwe days>"
 }
 
 func (f *Edit) Run(args []string) int {
