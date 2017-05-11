@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/mitchellh/cli"
 )
@@ -57,6 +58,12 @@ func NewRoot() Root {
 		r + "/Tasks/Finished/",
 	}
 	return root
+}
+
+func NewPoint(n int) (time.Time, time.Time) {
+	now := time.Now()
+	end := now.AddDate(0, 0, n)
+	return end, now
 }
 
 func main() {

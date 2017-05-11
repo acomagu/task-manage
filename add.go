@@ -22,9 +22,8 @@ func (f *Add) Help() string {
 }
 
 func (f *Add) Run(args []string) int {
-	now := time.Now()
 	n, _ := strconv.Atoi(os.Args[4])
-	end := now.AddDate(0, 0, n)
+	end, now := NewPoint(n)
 	data := Data{
 		os.Args[2],
 		os.Args[3],
