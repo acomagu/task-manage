@@ -1,10 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
-
 type List struct{}
 
 func (f *List) Help() string {
@@ -14,8 +9,7 @@ func (f *List) Help() string {
 func (f *List) Run(args []string) int {
 	roop := root.GetListTasks()
 	for _, v := range roop {
-		taskname := strings.Split(v, ".json")
-		fmt.Println(taskname[0])
+		Printj(root.troot + v)
 	}
 	return 0
 }

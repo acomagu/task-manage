@@ -32,5 +32,8 @@ func Printj(task string) {
 	fmt.Println("Title : ", data.Title)
 	fmt.Println("Content : ", data.Content)
 	fmt.Println("Dead Line : ", data.DeadLine.Format("2006-01-02"))
+	if data.DoneTime != data.DeadLine {
+		fmt.Println("Done Time : ", data.DoneTime.Format("2006-01-02"))
+	}
 	fmt.Println("---------------------------------------------------------------")
 }

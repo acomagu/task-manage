@@ -13,7 +13,9 @@ func (f *Done) Help() string {
 
 func (f *Done) Run(args []string) int {
 	old_file := root.have + os.Args[2] + ".json"
-
+	data := FindTask(old_file)
+	data.DoneTime, _ = NewPoint(0)
+	CreateFile(data)
 	new_file := root.finished + os.Args[2] + ".json"
 
 	err := os.Rename(old_file, new_file)
