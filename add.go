@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -32,18 +30,7 @@ func (f *Add) Run(args []string) int {
 		end,
 		end,
 	}
-	task := root.have + os.Args[2] + ".json"
-	fout, err := os.Create(task)
-	if err != nil {
-		fmt.Println(task, err)
-	}
-	outputJson, err := json.Marshal(&data)
-	fout.Write([]byte(outputJson))
-	if err != nil {
-		panic(err)
-	}
-	defer fout.Close()
-	Printj(task)
+	creatore.Task(data, root.have)
 	return 0
 }
 

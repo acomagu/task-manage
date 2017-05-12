@@ -23,8 +23,7 @@ func (f *Edit) Run(args []string) int {
 	n, _ := strconv.Atoi(os.Args[5])
 	end, _ := NewPoint(n)
 	data.DeadLine = end
-	CreateFile(data)
-	Printj(root.have + os.Args[3] + ".json")
+	creatore.Task(data, root.have)
 	return 0
 }
 

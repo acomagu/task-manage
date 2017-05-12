@@ -25,6 +25,12 @@ func (r Root) GetRootTasks() string {
 func (r Root) GetListTasks() []string {
 	return r.GetList(r.GetRootTasks())
 }
+func (r Root) GetRootFinished() string {
+	return r.finished
+}
+func (r Root) GetListFinished() []string {
+	return r.GetList(r.GetRootFinished())
+}
 func (r Root) GetRootHave() string {
 	return r.have
 }

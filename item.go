@@ -7,9 +7,7 @@ import (
 	"log"
 	"os"
 	"time"
-
 )
-
 
 func NewRoot() Root {
 	path := os.Getenv("HOME")
@@ -41,8 +39,12 @@ func FindTask(task string) Data {
 	return data
 }
 
-func CreateFile(data Data) {
-	fout, err := os.Create(root.have + data.Title + ".json")
+type CreateFile struct{}
+
+var creatore CreateFile
+
+func (s CreateFile) Task(data Data, path string) {
+	fout, err := os.Create(path + data.Title + ".json")
 	if err != nil {
 		fmt.Println(data.Title, err)
 	}
@@ -52,4 +54,5 @@ func CreateFile(data Data) {
 		panic(err)
 	}
 	defer fout.Close()
+	Printj(path + data.Title + ".json")
 }
