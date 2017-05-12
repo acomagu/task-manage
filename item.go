@@ -9,18 +9,6 @@ import (
 	"time"
 )
 
-func NewRoot() Root {
-	path := os.Getenv("HOME")
-	r := path + "/.task-manage"
-	root := Root{
-		r,
-		r + "/Tasks/",
-		r + "/Tasks/Have/",
-		r + "/Tasks/Finished/",
-	}
-	return root
-}
-
 func NewPoint(n int) (time.Time, time.Time) {
 	now := time.Now()
 	end := now.AddDate(0, 0, n)
@@ -43,7 +31,7 @@ type CreateFile struct{}
 
 var creatore CreateFile
 
-func (s CreateFile) Task(data Data, path string) {
+func (c CreateFile) Task(data Data, path string) {
 	fout, err := os.Create(path + data.Title + ".json")
 	if err != nil {
 		fmt.Println(data.Title, err)
@@ -54,5 +42,19 @@ func (s CreateFile) Task(data Data, path string) {
 		panic(err)
 	}
 	defer fout.Close()
-	Printj(path + data.Title + ".json")
+	TaskPrint(path + data.Title + ".json")
+}
+
+func (c CreateFile) Recode(recorde []Recode) {
+	fout, err := os.Create(root.root + "/recode.json")
+	if err != nil {
+		fmt.Println("Recode: ", err)
+	}
+	outputJson, err := json.Marshal(&recorde)
+	fout.Write([]byte(outputJson))
+	if err != nil {
+		panic(err)
+	}
+	defer fout.Close()
+	fmt.Println("Recoding file")
 }

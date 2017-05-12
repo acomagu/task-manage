@@ -15,10 +15,10 @@ func (f *Show) Run(args []string) int {
 	if len(os.Args) < 3 {
 		roop := root.GetListHave()
 		for _, v := range roop {
-			Printj(root.have + v)
+			TaskPrint(root.have + v)
 		}
 	} else {
-		Printj(root.have + os.Args[2] + ".json")
+		TaskPrint(root.have + os.Args[2] + ".json")
 	}
 	return 0
 }
@@ -27,7 +27,7 @@ func (f *Show) Synopsis() string {
 	return "display of task or all task"
 }
 
-func Printj(task string) {
+func TaskPrint(task string) {
 	data := FindTask(task)
 	fmt.Println("Title : ", data.Title)
 	fmt.Println("Content : ", data.Content)

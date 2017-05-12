@@ -9,7 +9,7 @@ func (f *List) Help() string {
 func (f *List) Run(args []string) int {
 	roop := root.GetListTasks()
 	for _, v := range roop {
-		Printj(root.troot + v)
+		TaskPrint(root.troot + v)
 	}
 	return 0
 }
