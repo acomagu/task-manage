@@ -13,14 +13,14 @@ func (f *Edit) Help() string {
 }
 
 func (f *Edit) Run(args []string) int {
-	task := root.have + os.Args[2] + ".json"
+	task := root.have + args[0] + ".json"
 	data := FindTask(task)
 	if err := os.Remove(task); err != nil {
 		fmt.Println(err)
 	}
-	data.Title = os.Args[3]
-	data.Content = os.Args[4]
-	n, _ := strconv.Atoi(os.Args[5])
+	data.Title = args[1]
+	data.Content = args[2]
+	n, _ := strconv.Atoi(args[3])
 	end, _ := NewPoint(n)
 	data.DeadLine = end
 	creatore.Task(data, root.have)

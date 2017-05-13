@@ -1,7 +1,6 @@
 package main
 
 import (
-	"os"
 	"strconv"
 	"time"
 )
@@ -21,11 +20,11 @@ func (f *Add) Help() string {
 }
 
 func (f *Add) Run(args []string) int {
-	n, _ := strconv.Atoi(os.Args[4])
+	n, _ := strconv.Atoi(args[2])
 	end, now := NewPoint(n)
 	data := Data{
-		os.Args[2],
-		os.Args[3],
+		args[0],
+		args[1],
 		now,
 		end,
 		end,

@@ -97,6 +97,9 @@ func main() {
 		"recode": func() (cli.Command, error) {
 			return &Recode{}, nil
 		},
+		"delete": func() (cli.Command, error) {
+			return &Delete{}, nil
+		},
 	}
 
 	exitStatus, err := c.Run()
