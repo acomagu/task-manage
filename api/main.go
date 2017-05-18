@@ -10,14 +10,6 @@ import (
 	"time"
 )
 
-type Input struct {
-	In string
-}
-
-type Output struct {
-	Out string
-}
-
 type Data struct {
 	Title     string    `json:"title"`
 	Content   string    `json:"content"`
