@@ -30,6 +30,10 @@ func jsonHandleFunc(rw http.ResponseWriter, req *http.Request) {
 		if e != nil {
 			fmt.Println(e)
 		}
+		rw.Header().Set("Access-Control-Allow-Origin", req.RemoteAddr)
+		rw.Header().Set("Access-Control-Allow-Credentials", "true")
+		rw.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+		rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		rw.Header().Set("Content-Type", "application/json")
 		fmt.Fprint(rw, string(outjson))
 	}()
