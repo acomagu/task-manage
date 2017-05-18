@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
+	"net/http/fcgi"
 	"os"
 	"time"
 )
@@ -23,28 +25,30 @@ type Recode struct {
 	Data Data `json:"data"`
 }
 
+type Replay struct {
+	Recode []Recode `json:"recode"`
+}
+
 func jsonHandleFunc(rw http.ResponseWriter, req *http.Request) {
-	output := []Recode{}
-	defer func() {
-		outjson, e := json.Marshal(output)
-		if e != nil {
-			fmt.Println(e)
-		}
-		rw.Header().Set("Access-Control-Allow-Origin", req.RemoteAddr)
-		rw.Header().Set("Access-Control-Allow-Credentials", "true")
-		rw.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
-		rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		rw.Header().Set("Content-Type", "application/json")
-		fmt.Fprint(rw, string(outjson))
-	}()
+	rw.Header().Set("Access-Control-Allow-Origin", req.RemoteAddr)
+	rw.Header().Set("Access-Control-Allow-Credentials", "true")
+	rw.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+	rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	rw.Header().Set("Content-Type", "application/json")
+	var output Replay
+	// defer func() {
+	// 	outjson, e := json.Marshal(output)
+	// 	if e != nil {
+	// 		fmt.Println(e)
+	// 	}
+	// 	fmt.Print("TTTTTTTTTTTT")
+	// 	fmt.Fprint(rw, string(outjson))
+	// }()
 
 	if req.Method == "GET" {
 		data := FindTask("./recode.json")
-		outjson, e := json.Marshal(data)
-		if e != nil {
-			fmt.Println(e)
-		}
-		fmt.Fprint(rw, string(outjson))
+		json.NewEncoder(rw).Encode(data)
+		fmt.Print("SSSSSSSSSSSS")
 		return
 	}
 	body, e := ioutil.ReadAll(req.Body)
@@ -52,25 +56,31 @@ func jsonHandleFunc(rw http.ResponseWriter, req *http.Request) {
 		fmt.Println(e.Error())
 		return
 	}
-	input := []Recode{}
-	e = json.Unmarshal(body, &input)
-	output = input
-	Recodes(input)
-	if e != nil {
-		fmt.Println(e.Error())
+	if req.Method == "POST" {
+		input := Replay{}
+		e = json.Unmarshal(body, &input)
+		output = input
+		Recodes(input)
+		if e != nil {
+			fmt.Println(e.Error())
+			return
+		}
+		json.NewEncoder(rw).Encode(output)
+		fmt.Printf("%#v\n", input)
 		return
 	}
-	fmt.Printf("%#v\n", input)
 }
 
 func main() {
-	fs := http.FileServer(http.Dir("static"))
-	http.Handle("/", fs)
-	http.HandleFunc("/json", jsonHandleFunc)
-	http.ListenAndServe(":8080", nil)
+	l, err := net.Listen("tcp", "127.0.0.1:9000")
+	if err != nil {
+		return
+	}
+	http.HandleFunc("/", jsonHandleFunc)
+	fcgi.Serve(l, nil)
 }
 
-func Recodes(recorde []Recode) {
+func Recodes(recorde Replay) {
 	fout, err := os.Create("recode.json")
 	if err != nil {
 		fmt.Println("Recode: ", err)
@@ -84,12 +94,12 @@ func Recodes(recorde []Recode) {
 	fmt.Println("Recoding file")
 }
 
-func FindTask(task string) []Recode {
+func FindTask(task string) Replay {
 	bytes, err := ioutil.ReadFile(task)
 	if err != nil {
 		log.Fatal(err)
 	}
-	var data []Recode
+	var data Replay
 	if err := json.Unmarshal(bytes, &data); err != nil {
 		log.Fatal(err)
 	}
