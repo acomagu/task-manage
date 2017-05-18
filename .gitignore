@@ -1,3 +1,5 @@
 app
 Tasks
 task-manage
+./cli/cli
+./api/recode.json
