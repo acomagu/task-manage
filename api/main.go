@@ -1,15 +1,9 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"log"
 	"net"
 	"net/http"
 	"net/http/fcgi"
-	"os"
-	"strings"
 	"time"
 )
 
@@ -30,78 +24,12 @@ type Replay struct {
 	Recode []Recode `json:"recode"`
 }
 
-func jsonHandleFunc(rw http.ResponseWriter, req *http.Request) {
-	rw.Header().Set("Access-Control-Allow-Origin", "*")
-	rw.Header().Set("Access-Control-Allow-Credentials", "true")
-	rw.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
-	rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	rw.Header().Set("Content-Type", "application/json")
-	if req.Method == "OPTIONS" {
-		//ヘッダーにAuthorizationが含まれていた場合はpreflight成功
-		s := req.Header.Get("Access-Control-Request-Headers")
-		if strings.Contains(s, "authorization") == true || strings.Contains(s, "Authorization") == true {
-			rw.WriteHeader(204)
-		}
-		rw.WriteHeader(400)
-		return
-	}
-	var output Replay
-	if req.Method == "GET" {
-		data := FindTask("./recode.json")
-		json.NewEncoder(rw).Encode(data)
-		return
-	}
-	body, e := ioutil.ReadAll(req.Body)
-	if e != nil {
-		fmt.Println(e.Error())
-		return
-	}
-	if req.Method == "POST" {
-		input := Replay{}
-		e = json.Unmarshal(body, &input)
-		output = input
-		Recodes(input)
-		if e != nil {
-			fmt.Println(e.Error())
-			return
-		}
-		json.NewEncoder(rw).Encode(output)
-		fmt.Printf("%#v\n", input)
-		return
-	}
-}
-
 func main() {
 	l, err := net.Listen("tcp", "127.0.0.1:9000")
 	if err != nil {
 		return
 	}
-	http.HandleFunc("/", jsonHandleFunc)
+	http.HandleFunc("/", JsonHandleFunc)
+	http.HandleFunc("/not", FalseHandler)
 	fcgi.Serve(l, nil)
-}
-
-func Recodes(recorde Replay) {
-	fout, err := os.Create("recode.json")
-	if err != nil {
-		fmt.Println("Recode: ", err)
-	}
-	outputJson, err := json.Marshal(&recorde)
-	fout.Write([]byte(outputJson))
-	if err != nil {
-		panic(err)
-	}
-	defer fout.Close()
-	fmt.Println("Recoding file")
-}
-
-func FindTask(task string) Replay {
-	bytes, err := ioutil.ReadFile(task)
-	if err != nil {
-		log.Fatal(err)
-	}
-	var data Replay
-	if err := json.Unmarshal(bytes, &data); err != nil {
-		log.Fatal(err)
-	}
-	return data
 }
