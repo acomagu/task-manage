@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/fcgi"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -30,25 +31,24 @@ type Replay struct {
 }
 
 func jsonHandleFunc(rw http.ResponseWriter, req *http.Request) {
-	rw.Header().Set("Access-Control-Allow-Origin", req.RemoteAddr)
+	rw.Header().Set("Access-Control-Allow-Origin", "*")
 	rw.Header().Set("Access-Control-Allow-Credentials", "true")
 	rw.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
 	rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 	rw.Header().Set("Content-Type", "application/json")
+	if req.Method == "OPTIONS" {
+		//ヘッダーにAuthorizationが含まれていた場合はpreflight成功
+		s := req.Header.Get("Access-Control-Request-Headers")
+		if strings.Contains(s, "authorization") == true || strings.Contains(s, "Authorization") == true {
+			rw.WriteHeader(204)
+		}
+		rw.WriteHeader(400)
+		return
+	}
 	var output Replay
-	// defer func() {
-	// 	outjson, e := json.Marshal(output)
-	// 	if e != nil {
-	// 		fmt.Println(e)
-	// 	}
-	// 	fmt.Print("TTTTTTTTTTTT")
-	// 	fmt.Fprint(rw, string(outjson))
-	// }()
-
 	if req.Method == "GET" {
 		data := FindTask("./recode.json")
 		json.NewEncoder(rw).Encode(data)
-		fmt.Print("SSSSSSSSSSSS")
 		return
 	}
 	body, e := ioutil.ReadAll(req.Body)

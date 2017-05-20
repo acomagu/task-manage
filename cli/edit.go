@@ -23,6 +23,7 @@ func (f *Edit) Run(args []string) int {
 	n, _ := strconv.Atoi(args[3])
 	end, _ := NewPoint(n)
 	data.DeadLine = end
+	data.DoneTime = end
 	creatore.Task(data, root.have)
 	return 0
 }
