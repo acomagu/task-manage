@@ -1,13 +1,19 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"time"
 )
+
+type Replay struct {
+	Recode []Recode `json:"recode"`
+}
 
 func NewPoint(n int) (time.Time, time.Time) {
 	now := time.Now()
@@ -25,6 +31,29 @@ func FindTask(task string) Data {
 		log.Fatal(err)
 	}
 	return data
+}
+func NewIp() Ip {
+	bytes, err := ioutil.ReadFile(root.root + "/ip.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	var data Ip
+	if err := json.Unmarshal(bytes, &data); err != nil {
+		log.Fatal(err)
+	}
+	return data
+}
+
+func NewRecode() Replay {
+	bytes, err := ioutil.ReadFile(root.root + "/recode.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	var data []Recode
+	if err := json.Unmarshal(bytes, &data); err != nil {
+		log.Fatal(err)
+	}
+	return Replay{data}
 }
 
 type CreateFile struct{}
@@ -57,4 +86,50 @@ func (c CreateFile) Recode(recorde []Recode) {
 	}
 	defer fout.Close()
 	fmt.Println("Recoding file")
+}
+
+func (c CreateFile) IpMemory(ip Ip) {
+	fout, err := os.Create(root.root + "/ip.json")
+	if err != nil {
+		fmt.Println("Ip: ", err)
+	}
+	outputJson, err := json.Marshal(&ip)
+	fout.Write([]byte(outputJson))
+	if err != nil {
+		panic(err)
+	}
+	defer fout.Close()
+	fmt.Println("Memory ip")
+}
+
+func ArrayContains(arr []string, str string) (int, bool) {
+	for i, v := range arr {
+		if v == str {
+			return i, true
+		}
+	}
+	return -1, false
+}
+
+func HttpPost(url string, recode Replay) error {
+	outputJson, err := json.Marshal(&recode)
+	req, err := http.NewRequest(
+		"POST",
+		url,
+		bytes.NewBuffer([]byte(outputJson)),
+	)
+	if err != nil {
+		return err
+	}
+	// Content-Type 設定
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	return err
 }

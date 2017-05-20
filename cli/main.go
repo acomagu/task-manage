@@ -100,6 +100,9 @@ func main() {
 		"delete": func() (cli.Command, error) {
 			return &Delete{}, nil
 		},
+		"push": func() (cli.Command, error) {
+			return &Push{}, nil
+		},
 	}
 
 	exitStatus, err := c.Run()
