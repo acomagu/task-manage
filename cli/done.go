@@ -16,7 +16,7 @@ func (f *Done) Run(args []string) int {
 	data := FindTask(old_file)
 	data.DoneTime, _ = NewPoint(0)
 	creatore.Task(data, root.have)
-	new_file := root.finished + args[1] + ".json"
+	new_file := root.finished + args[0] + ".json"
 	err := os.Rename(old_file, new_file)
 	if err != nil {
 		fmt.Println(err)
