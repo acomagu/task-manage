@@ -21,6 +21,17 @@ func NewPoint(n int) (time.Time, time.Time) {
 	return end, now
 }
 
+func TaskPrint(task string) {
+	data := FindTask(task)
+	fmt.Println("Title : ", data.Title)
+	fmt.Println("Content : ", data.Content)
+	fmt.Println("Dead Line : ", data.DeadLine.Format("2006-01-02"))
+	if data.DoneTime != data.DeadLine {
+		fmt.Println("Done Time : ", data.DoneTime.Format("2006-01-02"))
+	}
+	fmt.Println("---------------------------------------------------------------")
+}
+
 func FindTask(task string) Data {
 	bytes, err := ioutil.ReadFile(task)
 	if err != nil {
@@ -32,6 +43,24 @@ func FindTask(task string) Data {
 	}
 	return data
 }
+
+func FindTaskin5days(tasks []string) [][]string {
+	day := time.Now()
+	var days5 [][]string
+
+	for _, v := range tasks {
+		data := FindTask(v)
+		sub := data.DeadLine.Sub(day)
+		subdays := int(sub.Hours())
+		if 0 <= subdays/24 && subdays/24 < 5 {
+			taskdays := []string{"", "", "", "", ""}
+			taskdays[subdays/24] = data.Title
+			days5 = append(days5, taskdays)
+		}
+	}
+	return days5
+}
+
 func NewIp() Ip {
 	bytes, err := ioutil.ReadFile(root.root + "/ip.json")
 	if err != nil {

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -25,15 +24,4 @@ func (f *Show) Run(args []string) int {
 
 func (f *Show) Synopsis() string {
 	return "display of task or all task"
-}
-
-func TaskPrint(task string) {
-	data := FindTask(task)
-	fmt.Println("Title : ", data.Title)
-	fmt.Println("Content : ", data.Content)
-	fmt.Println("Dead Line : ", data.DeadLine.Format("2006-01-02"))
-	if data.DoneTime != data.DeadLine {
-		fmt.Println("Done Time : ", data.DoneTime.Format("2006-01-02"))
-	}
-	fmt.Println("---------------------------------------------------------------")
 }

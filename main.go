@@ -103,6 +103,9 @@ func main() {
 		"push": func() (cli.Command, error) {
 			return &Push{}, nil
 		},
+		"calendar": func() (cli.Command, error) {
+			return &Calender{}, nil
+		},
 	}
 
 	exitStatus, err := c.Run()
