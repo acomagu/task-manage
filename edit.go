@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -13,14 +14,17 @@ func (f *Edit) Help() string {
 }
 
 func (f *Edit) Run(args []string) int {
-	task := root.have + args[0] + ".json"
+	task := filepath.Join(root.have, args[0]+".json")
 	data := FindTask(task)
 	if err := os.Remove(task); err != nil {
 		fmt.Println(err)
 	}
 	data.Title = args[1]
 	data.Content = args[2]
-	n, _ := strconv.Atoi(args[3])
+	n, err := strconv.Atoi(args[3])
+	if err != nil {
+		fmt.Println(err)
+	}
 	end, _ := NewPoint(n)
 	data.DeadLine = end
 	data.DoneTime = end

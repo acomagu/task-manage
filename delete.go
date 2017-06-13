@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 type Delete struct{}
@@ -13,7 +14,7 @@ func (f *Delete) Help() string {
 
 func (f *Delete) Run(args []string) int {
 	deleteRootPath := GetDeleteRootPath(args[1])
-	if err := os.Remove(deleteRootPath + args[0] + ".json"); err != nil {
+	if err := os.Remove(filepath.Join(deleteRootPath, args[0]+".json")); err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Println("Delete ", args[0])

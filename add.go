@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"strconv"
 	"time"
 )
@@ -20,7 +21,11 @@ func (f *Add) Help() string {
 }
 
 func (f *Add) Run(args []string) int {
-	n, _ := strconv.Atoi(args[2])
+	n, err := strconv.Atoi(args[2])
+	if err != nil {
+		log.Println(err)
+		return 1
+	}
 	end, now := NewPoint(n)
 	data := Data{
 		args[0],

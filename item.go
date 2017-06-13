@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -47,7 +48,7 @@ func FindTaskin5days(tasks []string) [][]string {
 		sub := data.DeadLine.Sub(day)
 		subdays := int(sub.Hours())
 		if 0 <= subdays/24 && subdays/24 < 5 {
-			taskdays := []string{"", "", "", "", ""}
+			taskdays := make([]string, 5)
 			taskdays[subdays/24] = data.Title
 			days5 = append(days5, taskdays)
 		}
@@ -60,7 +61,7 @@ type CreateFile struct{}
 var creatore CreateFile
 
 func (c CreateFile) Task(data Data, path string) {
-	fout, err := os.Create(path + data.Title + ".json")
+	fout, err := os.Create(filepath.Join(path, data.Title+".json"))
 	if err != nil {
 		fmt.Println(data.Title, err)
 	}
@@ -70,7 +71,7 @@ func (c CreateFile) Task(data Data, path string) {
 		panic(err)
 	}
 	defer fout.Close()
-	TaskPrint(path + data.Title + ".json")
+	TaskPrint(filepath.Join(path, data.Title+".json"))
 }
 
 func ArrayContains(arr []string, str string) (int, bool) {
@@ -81,4 +82,3 @@ func ArrayContains(arr []string, str string) (int, bool) {
 	}
 	return -1, false
 }
-

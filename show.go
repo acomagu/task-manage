@@ -17,7 +17,7 @@ func (f *Show) Run(args []string) int {
 			TaskPrint(root.have + v)
 		}
 	} else {
-		TaskPrint(root.have + args[0] + ".json")
+		TaskPrint(filepath.Json(root.have, args[0]+".json"))
 	}
 	return 0
 }
