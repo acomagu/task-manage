@@ -4,6 +4,8 @@ import (
 	"os"
 	"fmt"
 	"path/filepath"
+	"crypto/sha512"
+	"encoding/json"
 )
 
 type DB struct {
@@ -54,4 +56,23 @@ func (db DB) collect(rootpath string) TaskList {
 		fmt.Println("Walk", err)
 	}
 	return result
+}
+
+func (db DB) Store(task Task) error {
+	id := fmt.Sprintf("%x", sha512.Sum512([]byte(task.Title)))[:10]
+	filename := fmt.Sprintf("%s.json", id)
+	fout, err := os.Create(filepath.Join(db.path.Ongoing(), filename))
+	if err != nil {
+		return err
+	}
+
+	outputJson, err := json.Marshal(&task)
+	fout.Write([]byte(outputJson))
+	defer fout.Close()
+	if err != nil {
+		return err
+	}
+
+	// TaskPrint(path + data.Title + ".json")
+	return nil
 }
