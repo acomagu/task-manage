@@ -19,7 +19,11 @@ func (f *Edit) Help() string {
 
 func (f *Edit) Run(args []string) int {
 	task := filepath.Join(root.have, args[0]+".json")
-	data := FindTask(task)
+	data, err := FindTask(task)
+	if err != nil {
+		f.ui.Error(fmt.Sprint(err))
+		return 1
+	}
 	if err := os.Remove(task); err != nil {
 		f.ui.Error(fmt.Sprint(err))
 		return 1

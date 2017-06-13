@@ -3,8 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"time"
@@ -27,16 +25,19 @@ func TaskPrint(task string) {
 	fmt.Println("---------------------------------------------------------------")
 }
 
-func FindTask(task string) Data {
-	bytes, err := ioutil.ReadFile(task)
+func FindTask(task string) (Data, error) {
+	f, err := os.Open(task)
 	if err != nil {
-		log.Fatal(err)
+		return Data{}, err
 	}
+	defer f.Close()
+
 	var data Data
-	if err := json.Unmarshal(bytes, &data); err != nil {
-		log.Fatal(err)
+	decoder := json.NewDecoder(f)
+	if err := decoder.Decode(&data); err != nil {
+		return Data{}, err
 	}
-	return data
+	return data, nil
 }
 
 func FindTaskin5days(tasks []string) [][]string {
@@ -60,18 +61,20 @@ type CreateFile struct{}
 
 var creatore CreateFile
 
-func (c CreateFile) Task(data Data, path string) {
+func (c CreateFile) Task(data Data, path string) error {
 	fout, err := os.Create(filepath.Join(path, data.Title+".json"))
 	if err != nil {
-		fmt.Println(data.Title, err)
-	}
-	outputJson, err := json.Marshal(&data)
-	fout.Write([]byte(outputJson))
-	if err != nil {
-		panic(err)
+		return err
 	}
 	defer fout.Close()
+
+	encoder := json.NewEncoder(fout)
+	if err := encoder.Encode(&data); err != nil {
+		return err
+	}
 	TaskPrint(filepath.Join(path, data.Title+".json"))
+
+	return nil
 }
 
 func ArrayContains(arr []string, str string) (int, bool) {

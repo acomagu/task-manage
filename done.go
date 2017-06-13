@@ -18,7 +18,11 @@ func (f *Done) Help() string {
 
 func (f *Done) Run(args []string) int {
 	old_file := filepath.Join(root.have, args[0]+".json")
-	data := FindTask(old_file)
+	data, err := FindTask(old_file)
+	if err != nil {
+		f.ui.Error(fmt.Sprint(err))
+		return 1
+	}
 	data.DoneTime, _ = NewPoint(0)
 	creatore.Task(data, root.have)
 	new_file := filepath.Join(root.finished, args[0]+".json")

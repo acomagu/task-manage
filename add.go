@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"time"
 
@@ -28,7 +27,6 @@ func (f *Add) Help() string {
 func (f *Add) Run(args []string) int {
 	n, err := strconv.Atoi(args[2])
 	if err != nil {
-		log.Println(err)
 		f.ui.Error(fmt.Sprint(err))
 		return 1
 	}
@@ -40,7 +38,13 @@ func (f *Add) Run(args []string) int {
 		end,
 		end,
 	}
-	creatore.Task(data, root.have)
+
+	err = creatore.Task(data, root.have)
+	if err != nil {
+		f.ui.Error(fmt.Sprintf("%s: %s", data.Title, err))
+		return 1
+	}
+
 	return 0
 }
 
