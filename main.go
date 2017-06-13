@@ -94,14 +94,8 @@ func main() {
 		"edit": func() (cli.Command, error) {
 			return &Edit{}, nil
 		},
-		"recode": func() (cli.Command, error) {
-			return &Recode{}, nil
-		},
 		"delete": func() (cli.Command, error) {
 			return &Delete{}, nil
-		},
-		"push": func() (cli.Command, error) {
-			return &Push{}, nil
 		},
 		"calendar": func() (cli.Command, error) {
 			return &Calender{}, nil
