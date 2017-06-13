@@ -2,9 +2,13 @@ package main
 
 import (
 	"os"
+
+	"github.com/mitchellh/cli"
 )
 
-type Show struct{}
+type Show struct {
+	ui cli.Ui
+}
 
 func (f *Show) Help() string {
 	return "app Show"

@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/mitchellh/cli"
 )
 
 type Data struct {
@@ -14,7 +17,9 @@ type Data struct {
 	DoneTime  time.Time `json:"donetime"`
 }
 
-type Add struct{}
+type Add struct {
+	ui cli.Ui
+}
 
 func (f *Add) Help() string {
 	return "You can add a task \n ./app add <title> <content> <Days>"
@@ -24,6 +29,7 @@ func (f *Add) Run(args []string) int {
 	n, err := strconv.Atoi(args[2])
 	if err != nil {
 		log.Println(err)
+		f.ui.Error(fmt.Sprint(err))
 		return 1
 	}
 	end, now := NewPoint(n)

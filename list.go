@@ -1,6 +1,10 @@
 package main
 
-type List struct{}
+import "github.com/mitchellh/cli"
+
+type List struct {
+	ui cli.Ui
+}
 
 func (f *List) Help() string {
 	return "app List"
