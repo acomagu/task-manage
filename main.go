@@ -7,15 +7,31 @@ import (
 	"github.com/mitchellh/cli"
 )
 
-func main() {
-	c := cli.NewCLI("app", "1.0.0")
+var db DB
 
+func main() {
+	var err error
+	db, err = newDB()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	c := createCLI()
 	c.Args = os.Args[1:]
 
+	initDataDir()
+	exitStatus, err := c.Run()
+	if err != nil {
+		log.Println(err)
+	}
+	os.Exit(exitStatus)
+}
+
+func createCLI() *cli.CLI {
+	c := cli.NewCLI("app", "1.0.0")
+
 	c.Commands = map[string]cli.CommandFactory{
-		"init": func() (cli.Command, error) {
-			return &Init{}, nil
-		},
 		"list": func() (cli.Command, error) {
 			return &List{}, nil
 		},
@@ -35,10 +51,5 @@ func main() {
 			return &Delete{}, nil
 		},
 	}
-
-	exitStatus, err := c.Run()
-	if err != nil {
-		log.Println(err)
-	}
-	os.Exit(exitStatus)
+	return c
 }
