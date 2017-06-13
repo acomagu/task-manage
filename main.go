@@ -97,9 +97,6 @@ func main() {
 		"delete": func() (cli.Command, error) {
 			return &Delete{}, nil
 		},
-		"calendar": func() (cli.Command, error) {
-			return &Calender{}, nil
-		},
 	}
 
 	exitStatus, err := c.Run()
