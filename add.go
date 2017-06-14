@@ -3,18 +3,9 @@ package main
 import (
 	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/mitchellh/cli"
 )
-
-type Data struct {
-	Title     string    `json:"title"`
-	Content   string    `json:"content"`
-	CreatedAt time.Time `json:"created_at"`
-	DeadLine  time.Time `json:"deadline"`
-	DoneTime  time.Time `json:"donetime"`
-}
 
 type Add struct {
 	ui cli.Ui
@@ -31,16 +22,16 @@ func (f *Add) Run(args []string) int {
 		return 1
 	}
 	end, now := NewPoint(n)
-	data := Task{
+	task := Task{
 		Title: args[0],
 		Content: args[1],
 		CreatedAt: now,
 		Deadline: end,
 	}
 
-	err = creatore.Task(data, root.have)
+	err = db.Store(task)
 	if err != nil {
-		f.ui.Error(fmt.Sprintf("%s: %s", data.Title, err))
+		f.ui.Error(fmt.Sprintf("%s: %s\n", task.Title, err))
 		return 1
 	}
 
