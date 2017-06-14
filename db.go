@@ -54,6 +54,10 @@ func (db DB) readFrom(path string) (Task, error) {
 func (db DB) collect(rootpath string) TaskList {
 	var result TaskList
 	err := filepath.Walk(rootpath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
 		if info.IsDir() {
 			return nil
 		}
@@ -69,10 +73,7 @@ func (db DB) collect(rootpath string) TaskList {
 }
 
 func (db DB) Store(task Task) error {
-	db.createOf(task, ongoing)
-
-	// TaskPrint(path + data.Title + ".json")
-	return nil
+	return db.createOf(task, ongoing)
 }
 
 func (db DB) Finish(title string) error {
