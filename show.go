@@ -2,9 +2,13 @@ package main
 
 import (
 	"os"
+
+	"github.com/mitchellh/cli"
 )
 
-type Show struct{}
+type Show struct {
+	ui cli.Ui
+}
 
 func (f *Show) Help() string {
 	return "app Show"
@@ -17,7 +21,7 @@ func (f *Show) Run(args []string) int {
 			TaskPrint(root.have + v)
 		}
 	} else {
-		TaskPrint(root.have + args[0] + ".json")
+		TaskPrint(filepath.Json(root.have, args[0]+".json"))
 	}
 	return 0
 }

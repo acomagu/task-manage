@@ -1,8 +1,8 @@
 package main
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"path/filepath"
 	"crypto/sha512"
 	"encoding/json"
@@ -45,7 +45,7 @@ func (db DB) collect(rootpath string) TaskList {
 
 		rel, err := filepath.Rel(rootpath, path)
 		if err != nil {
-			fmt.Println(err)
+			return err
 		}
 
 		result = append(result, rel)
