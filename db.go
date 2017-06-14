@@ -63,7 +63,7 @@ func (db DB) collect(rootpath string) TaskList {
 			return err
 		}
 
-		result = append(result, rel)
+		result = append(result, filepath.Join(db.path.Root(), rel))
 		return nil
 	})
 
