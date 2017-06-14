@@ -58,12 +58,7 @@ func (db DB) collect(rootpath string) TaskList {
 			return nil
 		}
 
-		rel, err := filepath.Rel(rootpath, path)
-		if err != nil {
-			return err
-		}
-
-		result = append(result, filepath.Join(db.path.Root(), rel))
+		result = append(result, path)
 		return nil
 	})
 
