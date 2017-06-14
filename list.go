@@ -11,9 +11,14 @@ func (f *List) Help() string {
 }
 
 func (f *List) Run(args []string) int {
-	roop := root.GetListTasks()
-	for _, v := range roop {
-		TaskPrint(root.troot + v)
+	paths := db.All()
+	for _, path := range paths {
+		task, err := db.readFrom(path)
+		if err != nil {
+			f.ui.Error(err.Error())
+			return 1
+		}
+		printTask(task)
 	}
 	return 0
 }

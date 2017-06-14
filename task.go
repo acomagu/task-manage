@@ -9,3 +9,10 @@ type Task struct {
 	Deadline   time.Time `json:"deadline"`
 	FinishedAt time.Time `json:"finished_at"`
 }
+
+type TaskState int
+
+const (
+	ongoing = iota + 1
+	finished
+)

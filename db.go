@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"crypto/sha512"
 	"encoding/json"
+	"time"
 )
 
 type DB struct {
@@ -35,6 +36,20 @@ func (db DB) Ongoing() TaskList {
 	return db.collect(db.path.Ongoing())
 }
 
+func (db DB) readFrom(path string) (Task, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return Task{}, err
+	}
+	defer f.Close()
+
+	var task Task
+	if err := json.NewDecoder(f).Decode(&task); err != nil {
+		return Task{}, err
+	}
+	return task, nil
+}
+
 // collect lists all file paths under the rootpath.
 func (db DB) collect(rootpath string) TaskList {
 	var result TaskList
@@ -59,20 +74,59 @@ func (db DB) collect(rootpath string) TaskList {
 }
 
 func (db DB) Store(task Task) error {
-	id := fmt.Sprintf("%x", sha512.Sum512([]byte(task.Title)))[:10]
-	filename := fmt.Sprintf("%s.json", id)
-	fout, err := os.Create(filepath.Join(db.path.Ongoing(), filename))
-	if err != nil {
-		return err
-	}
-
-	outputJson, err := json.Marshal(&task)
-	fout.Write([]byte(outputJson))
-	defer fout.Close()
-	if err != nil {
-		return err
-	}
+	db.createOf(task, ongoing)
 
 	// TaskPrint(path + data.Title + ".json")
 	return nil
+}
+
+func (db DB) Finish(title string) error {
+	task, err := db.readFrom(db.calcFilePath(title, ongoing))
+	if err != nil {
+		return err
+	}
+
+	err = db.deleteOf(title, ongoing)
+	if err != nil {
+		return err
+	}
+
+	task.FinishedAt = time.Now()
+
+	return db.createOf(task, finished)
+}
+
+func (db DB) deleteOf(title string, state TaskState) error {
+	path := db.calcFilePath(title, state)
+	return os.Remove(path)
+}
+
+func (db DB) calcFilePath(title string, state TaskState) string {
+	filename := db.calcFileName(title)
+	return filepath.Join(db.stateDirPath(state), filename)
+}
+
+func (db DB) calcFileName(title string) string {
+	id := fmt.Sprintf("%x", sha512.Sum512([]byte(title)))[:10]
+	return fmt.Sprintf("%s.json", id)
+}
+
+func (db DB) createOf(task Task, state TaskState) error {
+	fout, err := os.Create(db.calcFilePath(task.Title, ongoing))
+	if err != nil {
+		return err
+	}
+	defer fout.Close()
+
+	return json.NewEncoder(fout).Encode(&task)
+	// TaskPrint(filepath.Join(path, data.Title+".json"))
+}
+
+func (db DB) stateDirPath(state TaskState) string {
+	if state == ongoing {
+		return db.path.Ongoing()
+	} else if state == finished {
+		return db.path.Finished()
+	}
+	return ""
 }

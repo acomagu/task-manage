@@ -16,12 +16,22 @@ func (f *Show) Help() string {
 
 func (f *Show) Run(args []string) int {
 	if len(os.Args) < 3 {
-		roop := root.GetListHave()
-		for _, v := range roop {
-			TaskPrint(root.have + v)
+		paths := db.Ongoing()
+		for _, path := range paths {
+			task, err := db.readFrom(path)
+			if err != nil {
+				f.ui.Error(err.Error())
+				return 1
+			}
+			printTask(task)
 		}
 	} else {
-		TaskPrint(filepath.Json(root.have, args[0]+".json"))
+		task, err := db.readFrom(db.calcFileName(args[0]))
+		if err != nil {
+			f.ui.Error(err.Error())
+			return 1
+		}
+		printTask(task)
 	}
 	return 0
 }

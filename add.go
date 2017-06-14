@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/mitchellh/cli"
 )
@@ -21,12 +22,11 @@ func (f *Add) Run(args []string) int {
 		f.ui.Error(fmt.Sprint(err))
 		return 1
 	}
-	end, now := NewPoint(n)
 	task := Task{
 		Title: args[0],
 		Content: args[1],
-		CreatedAt: now,
-		Deadline: end,
+		CreatedAt: time.Now(),
+		Deadline: time.Now().AddDate(0, 0, n),
 	}
 
 	err = db.Store(task)

@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 
 	"github.com/mitchellh/cli"
 )
@@ -17,8 +15,11 @@ func (f *Delete) Help() string {
 }
 
 func (f *Delete) Run(args []string) int {
-	deleteRootPath := GetDeleteRootPath(args[1])
-	if err := os.Remove(filepath.Join(deleteRootPath, args[0]+".json")); err != nil {
+	stateFlag := args[1]
+	state := parseStateFlag(stateFlag)
+	title := args[0]
+
+	if err := db.deleteOf(title, state); err != nil {
 		f.ui.Error(fmt.Sprint(err))
 		return 1
 	}
@@ -30,9 +31,9 @@ func (f *Delete) Synopsis() string {
 	return "display of all tasks"
 }
 
-func GetDeleteRootPath(s string) string {
+func parseStateFlag(s string) TaskState {
 	if s == "-o" {
-		return root.have
+		return ongoing
 	}
-	return root.finished
+	return finished
 }

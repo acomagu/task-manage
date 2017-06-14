@@ -53,10 +53,7 @@ func createCLI() *cli.CLI {
 			return &Show{ui}, nil
 		},
 		"finish": func() (cli.Command, error) {
-			return &Done{ui}, nil
-		},
-		"edit": func() (cli.Command, error) {
-			return &Edit{ui}, nil
+			return &Finish{ui}, nil
 		},
 		"delete": func() (cli.Command, error) {
 			return &Delete{ui}, nil
