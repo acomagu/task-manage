@@ -1,14 +1,15 @@
 package main
 
 import (
+	"crypto/sha512"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
-	"crypto/sha512"
-	"encoding/json"
 	"time"
 )
 
+// DB has methods to operate JSON files.
 type DB struct {
 	path DBPath
 }
@@ -24,14 +25,17 @@ func newDB() (DB, error) {
 	}, nil
 }
 
+// All returns slice of path of all task's JSON files.
 func (db DB) All() TaskList {
 	return db.collect(db.path.Root())
 }
 
+// Finished returns slice of path of finished task's JSON files.
 func (db DB) Finished() TaskList {
 	return db.collect(db.path.Finished())
 }
 
+// Ongoing returns slice of path of ongoing task's JSON files.
 func (db DB) Ongoing() TaskList {
 	return db.collect(db.path.Ongoing())
 }

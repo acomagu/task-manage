@@ -1,14 +1,14 @@
 package main
 
 import (
-	"path/filepath"
 	"os"
+	"path/filepath"
 
 	"github.com/mitchellh/go-homedir"
 )
 
 type DBPath struct {
-	root     string
+	root string
 }
 
 func newDBPath() (DBPath, error) {
